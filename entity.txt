@@ -1,0 +1,124 @@
+To create the Entity-Relationship (ER) model for the gym scenario, we need to identify the main **entities** (objects), their **attributes**, and the **relationships** between them. Here's how we can break it down:
+
+### 1. **Entities and Their Attributes:**
+- **Gymnasium:**
+  - **Attributes**:
+    - Gymnasium ID (Primary Key)
+    - Name
+    - Address
+    - Phone Number
+  
+- **Member:**
+  - **Attributes**:
+    - Member ID (Primary Key)
+    - Last Name
+    - First Name
+    - Address
+    - Date of Birth
+    - Gender
+    - Gymnasium ID (Foreign Key: references Gymnasium)
+  
+- **Session:**
+  - **Attributes**:
+    - Session ID (Primary Key)
+    - Sport Type
+    - Schedule
+    - Max Capacity (fixed at 20)
+  
+- **Coach:**
+  - **Attributes**:
+    - Coach ID (Primary Key)
+    - Last Name
+    - First Name
+    - Age
+    - Specialty
+  
+- **Registration:**
+  - **Attributes**:
+    - Registration ID (Primary Key)
+    - Member ID (Foreign Key: references Member)
+    - Session ID (Foreign Key: references Session)
+  
+- **Session-Coach Assignment:**
+  - **Attributes**:
+    - Session ID (Foreign Key: references Session)
+    - Coach ID (Foreign Key: references Coach)
+  
+### 2. **Relationships Between Entities:**
+- **Gymnasium has many Members**: A gymnasium can have multiple members, but each member is registered at one specific gymnasium.
+  - **Relationship**: One-to-many from **Gymnasium** to **Member**
+  
+- **Member registers for Sessions**: Each member can register for multiple sessions. A member can be part of many sessions over time.
+  - **Relationship**: Many-to-many between **Member** and **Session** via the **Registration** entity.
+  
+- **Session has Coaches**: A session can have up to two coaches, and each coach can lead multiple sessions.
+  - **Relationship**: Many-to-many between **Session** and **Coach** via the **Session-Coach Assignment** entity.
+
+### 3. **ER Diagram (Conceptual Model):**
+Here’s a description of the relationships:
+- **Gymnasium (1) --> (M) Member**: A gym can have many members.
+- **Member (M) --> (M) Session**: A member can register for many sessions, and each session can have many members.
+- **Session (M) --> (M) Coach**: A session can have up to two coaches, and a coach can lead many sessions.
+
+### ER Diagram:
+
+```
++------------------+          +--------------------+           +--------------------+
+|   Gymnasium     | 1 ---- M  |      Member        | M ---- M  |     Session        |
++------------------+          +--------------------+           +--------------------+
+| Gymnasium_ID (PK)|          | Member_ID (PK)     |           | Session_ID (PK)    |
+| Name             |          | Last Name          |           | Sport Type         |
+| Address          |          | First Name         |           | Schedule           |
+| Phone Number     |          | Address            |           | Max Capacity       |
++------------------+          | Date of Birth      |           +--------------------+
+                              | Gender             |           
+                              | Gymnasium_ID (FK)  |
+                              +--------------------+  
+                                      |
+                                      |
+                                      |
+                                      V
+                          +------------------------+
+                          |    Registration        |
+                          +------------------------+
+                          | Registration_ID (PK)   |
+                          | Member_ID (FK)         |
+                          | Session_ID (FK)        |
+                          +------------------------+
+                                      |
+                                      |
+                                      |
+                                      V
+                          +------------------------+
+                          |   Session-Coach        |
+                          +------------------------+
+                          | Session_ID (FK)        |
+                          | Coach_ID (FK)          |
+                          +------------------------+
+                                      |
+                                      |
+                                      V
+                          +------------------------+
+                          |        Coach           |
+                          +------------------------+
+                          | Coach_ID (PK)          |
+                          | Last Name              |
+                          | First Name             |
+                          | Age                    |
+                          | Specialty              |
+                          +------------------------+
+```
+
+### 4. **Explanation of Relationships:**
+- **Gymnasium to Member (One-to-Many)**: One gymnasium can have many members, but each member is registered at only one gymnasium.
+  
+- **Member to Session (Many-to-Many)**: A member can attend multiple sessions, and a session can accommodate multiple members. The **Registration** entity resolves this many-to-many relationship.
+  
+- **Session to Coach (Many-to-Many)**: A session can have one or two coaches, and a coach can lead multiple sessions. This relationship is captured in the **Session-Coach Assignment** entity.
+
+### 5. **Business Rules:**
+- Each **Session** can accommodate a maximum of 20 members.
+- A **Session** can have up to 2 **Coaches**.
+- A **Member** can only attend **Sessions** they are registered for.
+
+This ER model provides a conceptual structure for managing gym registrations, sessions, coaches, and members. It allows the owner to better organize and manage the gym's operations.
